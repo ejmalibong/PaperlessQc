@@ -47,8 +47,8 @@ namespace PaperlessQc.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=NBCP-LT-144\\SQLEXPRESS;Initial Catalog=BrightKeeper;Persist Security " +
-            "Info=True;User ID=sa;Password=Nbc12#")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.20.230;Initial Catalog=BrightKeeper;Persist Security Info=Tru" +
+            "e;User ID=sa;Password=Nbc12#")]
         public string BkConString {
             get {
                 return ((string)(this["BkConString"]));

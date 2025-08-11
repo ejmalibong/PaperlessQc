@@ -79,121 +79,11 @@ namespace PaperlessQc
                     return;
                 }
 
-                // Get all files in the target directory
-                string[] allFiles = Directory.GetFiles(targetDir, "*.*");
 
-                // Find all matching inspection performance and packaging checksheet files
-                var inspectionFilesA = allFiles
-                    .Where(f => Path.GetFileNameWithoutExtension(f).Contains($"{model} Inspection Performance A"))
-                    .ToList();
-
-                var inspectionFilesB = allFiles
-                .Where(f => Path.GetFileNameWithoutExtension(f).Contains($"{model} Inspection Performance B"))
-                .ToList();
-
-                var packagingFiles = allFiles
-                    .Where(f => Path.GetFileNameWithoutExtension(f).Contains($"{model} Packaging Checksheet"))
-                    .ToList();
-
-                // Track missing files
-                List<string> missingFiles = new List<string>();
-
-                if (inspectionFilesA.Count == 0)
-                    missingFiles.Add($"{model} Inspection Performance A");
-
-                if (inspectionFilesB.Count == 0)
-                    missingFiles.Add($"{model} Inspection Performance B");
-
-                if (packagingFiles.Count == 0)
-                    missingFiles.Add($"{model} Packaging Checksheet");
-
-                if (missingFiles.Count > 0)
-                {
-                    MessageBox.Show($"The following file(s) were not found:\n\n{string.Join("\n", missingFiles)}",
-                                    "Missing Files", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-
-                // If no files are found, return
-                if (inspectionFilesA.Count == 0 && inspectionFilesB.Count == 0 && packagingFiles.Count == 0)
-                {
-                    return;
-                }
 
                 // Disable the main form
                 this.Enabled = false;
 
-                Task.Run(() =>
-                {
-                // Open each existing file
-                List<Process> processes = new List<Process>();
-
-                    foreach (var file in inspectionFilesA.Concat(inspectionFilesB).Concat(packagingFiles)) // Open ALL matching files
-                {
-
-                    // Copy file to temp directory to avoid locking the original
-                    string tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
-                    File.Copy(file, tempFile, true);
-
-                    using (ExcelPackage package = new ExcelPackage(new FileInfo(tempFile)))
-                    {
-                        ExcelWorkbook workbook = package.Workbook;
-
-                        // Get last visible sheet that is NOT "Data"
-                        ExcelWorksheet lastSheet = workbook.Worksheets.Reverse()
-                            .FirstOrDefault(sheet => sheet.Name != "Data");
-
-                        if (lastSheet != null)
-                        {
-                            lastSheet.Select(); // Set the last non-"Data" sheet as active
-
-                            string fileNameWithoutExt = Path.GetFileNameWithoutExtension(file);
-
-                            if (fileNameWithoutExt.Contains("Inspection Performance A"))
-                            {
-                                ExcelRange range = lastSheet.Cells["D6:P6"];
-                                var lastCell = range.Where(cell => cell.Value != null).LastOrDefault();
-                                if (lastCell != null)
-                                    lastSheet.View.ActiveCell = lastCell.Address;
-                            }
-                            else if (fileNameWithoutExt.Contains("Inspection Performance B"))
-                                {
-                                    ExcelRange range = lastSheet.Cells["D6:P6"];
-                                    var lastCell = range.Where(cell => cell.Value != null).LastOrDefault();
-                                    if (lastCell != null)
-                                        lastSheet.View.ActiveCell = lastCell.Address;
-                                }
-                            else if (fileNameWithoutExt.Contains("Packaging Checksheet"))
-                            {
-                                ExcelRange range = lastSheet.Cells["E7:Q7"];
-                                var lastCell = range.Where(cell => cell.Value != null).LastOrDefault();
-                                if (lastCell != null)
-                                    lastSheet.View.ActiveCell = lastCell.Address;
-                            }
-                        }
-
-                        package.Save();
-                    }
-
-                    // Open file and add process to the list
-                    Process prc = new Process();
-                    prc.StartInfo.FileName = file;
-                    prc.StartInfo.UseShellExecute = true;
-                    prc.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
-                    prc.Start();
-                    processes.Add(prc);
-                }
-
-                // Wait for all opened files to be closed
-                foreach (var prc in processes)
-                {
-                    prc.WaitForExit();
-                }
-
-                    // Re-enable the form after all files are closed (UI update on main thread)
-                    this.Invoke((MethodInvoker)delegate {
-                        this.Enabled = true;
-                    });
-                });
             }
             catch (Exception ex)
             {
@@ -201,6 +91,22 @@ namespace PaperlessQc
                 this.Enabled = true; // Ensure form is re-enabled in case of an error
             }
         }
+
+        bool IsFileLocked(string filePath)
+        {
+            try
+            {
+                using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    return false; // File is NOT locked
+                }
+            }
+            catch (IOException)
+            {
+                return true; // File is locked
+            }
+        }
+
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -404,7 +310,7 @@ namespace PaperlessQc
                     // Build a message listing all existing files
                     string fileList = string.Join("\n", existingFiles.Select(f => Path.GetFileName(f)));
 
-                    MessageBox.Show($"The following file(s) already exist:\n\n{fileList}\n\nForm creation was canceled.","", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"The following file(s) already exist:\n\n{fileList}\n\nForm creation was canceled.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -443,7 +349,8 @@ namespace PaperlessQc
                             sheet.Cells[6, 4].Value = dtpDate.Value.ToString("MMddyy");
                             sheet.View.ActiveCell = "D7";
 
-                        } else if (fileNameWithoutExt.Contains("Inspection Performance B"))
+                        }
+                        else if (fileNameWithoutExt.Contains("Inspection Performance B"))
                         {
                             sheet.View.ZoomScale = 100;
                             sheet.Cells[6, 4].Value = dtpDate.Value.ToString("MMddyy");
@@ -482,7 +389,8 @@ namespace PaperlessQc
                     }
 
                     // Enable the form after all files are closed (UI update on main thread)
-                    this.Invoke((MethodInvoker)delegate {
+                    this.Invoke((MethodInvoker)delegate
+                    {
                         this.Enabled = true;
                     });
                 });

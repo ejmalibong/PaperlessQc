@@ -14,3 +14,15 @@ B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\ob
 B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\obj\Debug\PaperlessQc.csproj.CopyComplete
 B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\obj\Debug\PaperlessQc.exe
 B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\obj\Debug\PaperlessQc.pdb
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\BouncyCastle.Crypto.dll
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\ICSharpCode.SharpZipLib.dll
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\NPOI.dll
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\NPOI.OOXML.dll
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\NPOI.OpenXml4Net.dll
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\NPOI.OpenXmlFormats.dll
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\BouncyCastle.Crypto.xml
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\ICSharpCode.SharpZipLib.pdb
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\ICSharpCode.SharpZipLib.xml
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\NPOI.xml
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\bin\Debug\NPOI.OOXML.xml
+B:\Users BACKUP\NBCP-LT-144\Documents\Visual Studio 2019\Projects\PaperlessQc\obj\Debug\PaperlessQc.csproj.AssemblyReference.cache
